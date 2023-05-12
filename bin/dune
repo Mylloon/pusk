@@ -1,4 +1,4 @@
 (executable
  (public_name pusk)
  (name main)
- (libraries pusk))
+ (libraries pusk cohttp-lwt-unix))
