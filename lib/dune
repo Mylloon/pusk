@@ -1,2 +1,4 @@
 (library
- (name pusk))
+ (name pusk)
+ (modules utils selenium_init)
+ (libraries cohttp-lwt-unix))
