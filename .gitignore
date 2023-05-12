@@ -1,3 +1,5 @@
 _build/
 
 /selenium-*.jar
+/gecko-*.tar.gz
+/geckodriver
