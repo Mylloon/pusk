@@ -8,7 +8,7 @@ TODO: (as you can see, nothing has been done yet!)
 - [x] Run Selenium in background during the life of the app
 - [ ] Figuring out how to use selenium
 - [ ] Check if latest tweet of user is more or less old than 30 days
-- [ ] Then tweet if needed something like "Don't delete my accound please"
+- [ ] Then tweet if needed something like "Don't delete my account please"
 - [ ] Close everything properly
 - [ ] Maybe create a docker image for easy deployment?
 
