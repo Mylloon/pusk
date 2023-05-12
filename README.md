@@ -11,7 +11,7 @@ $ opam switch list
 ```
 
 ```sh
-$ opam install cohttp-lwt-unix
+$ opam install cohttp-lwt-unix tls-lwt
 ```
 
 ## Name history
