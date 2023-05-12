@@ -60,3 +60,25 @@ let run_program_in_background program args =
     Unix.execvp program (Array.of_list (program :: args))
   | _ -> pid (* Parent process *)
 ;;
+
+type driver = Gecko of string
+
+let prepare version_selenium driver =
+  (* Gecko Driver *)
+  (match driver with
+  | Gecko version_driver ->
+    if not (Sys.file_exists "geckodriver")
+    then (
+      let archive = fmt "./gecko-%s.tar.gz" version_driver in
+      Lwt_main.run (download_gecko_driver version_driver archive);
+      (* TODO: Use native version instead of relying on Unix tools *)
+      let _ = Sys.command (fmt "tar xvzf %s" archive) in
+      ()));
+  (* Selenium *)
+  let selenium = fmt "selenium-%s.jar" version_selenium in
+  if not (Sys.file_exists selenium) then Lwt_main.run (download_selenium version_selenium);
+  selenium
+;;
+
+let run path = run_program_in_background "java" [ fmt "-jar %s" path; "standalone" ]
+let close pid = fst (Unix.waitpid [] pid)
