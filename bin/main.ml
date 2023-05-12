@@ -4,15 +4,30 @@ open Cohttp_lwt_unix
 
 let fmt = Printf.sprintf
 
-let download uri dest =
+let rec download uri dest =
   let* response, body = Client.get uri in
   let status = Response.status response in
-  if Cohttp.Code.code_of_status status = 302
+  let code = Cohttp.Code.code_of_status status in
+  if Cohttp.Code.is_redirection code
   then (
-    print_endline (fmt "\nDownloading %s ..." (Uri.to_string uri));
+    let headers = Response.headers response in
+    match Cohttp.Header.get headers "location" with
+    | Some url ->
+      let uri = Uri.of_string url in
+      let redirect_url = Uri.resolve "" uri uri in
+      download redirect_url dest
+    | None -> Lwt.fail_with "Redirect location not found")
+  else if Cohttp.Code.is_success code
+  then (
+    print_endline "Downloading...";
     let stream = Body.to_stream body in
-    Lwt_io.with_file ~mode:Lwt_io.output dest (fun chan ->
-        Lwt_stream.iter_s (Lwt_io.write chan) stream))
+    let res =
+      Lwt_io.with_file ~mode:Lwt_io.output dest (fun chan ->
+          Lwt_stream.iter_s (Lwt_io.write chan) stream)
+    in
+    let* () = res in
+    print_endline "Download done!";
+    Lwt.return_unit)
   else
     Lwt.fail_with
       ("Failed to download file. HTTP status: " ^ Cohttp.Code.string_of_status status)
