@@ -1,0 +1,4 @@
+(executable
+ (public_name pusk)
+ (name main)
+ (libraries pusk))
