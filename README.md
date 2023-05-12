@@ -6,8 +6,8 @@
 
 ```opam
 $ opam switch list
-#  switch   compiler                   description
-→  default  ocaml-base-compiler.5.0.0  default
+#  switch   compiler                    description
+→  default  ocaml-base-compiler.4.14.1  default
 ```
 
 ```sh
