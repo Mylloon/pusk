@@ -21,7 +21,7 @@ let execute_request url json =
   Lwt_main.run body
 ;;
 
-let get_session =
+let get_session () =
   let body = execute_request (fmt "%s/session" url) Json.connection_payload in
   print_endline body;
   body
