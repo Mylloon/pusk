@@ -19,3 +19,10 @@ let navigate_payload url = fmt {|
     "url": "%s"
   }
   |} url
+
+let execute_payload src = fmt {|
+  {
+    "script": "%s",
+    "args": []
+  }
+  |} src

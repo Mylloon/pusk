@@ -14,8 +14,9 @@ let stop (driver_process, session_id) =
 ;;
 
 let main session_id =
-  let body = navigate "https://twitter.com/i/flow/login" session_id in
-  print_endline body
+  ignore (navigate "https://twitter.com/i/flow/login" session_id);
+  (* Extra wait to be sure the page is loaded *)
+  Unix.sleep 5
 ;;
 
 let () =
