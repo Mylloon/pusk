@@ -4,12 +4,12 @@
 
 TODO: (as you can see, nothing has been done yet!)
 
-- [x] Download selenium
-- [x] Run Selenium in background during the life of the app
-- [x] Figuring out how to use selenium
+- [x] Download a driver
+- [x] Run a driver in background during the life of the app
+- [x] [Figuring out how to use drivers](https://w3c.github.io/webdriver/#endpoints)
 - [ ] Check if latest tweet of user is more or less old than 30 days
 - [ ] Then tweet if needed something like "Don't delete my account please"
-- [ ] Close everything properly
+- [x] Close everything properly
 - [ ] Maybe create a docker image for easy deployment?
 
 ## Requirements
