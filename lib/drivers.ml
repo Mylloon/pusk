@@ -40,19 +40,6 @@ let download_gecko_driver version output =
   download (Uri.of_string (fmt url version version)) output
 ;;
 
-let run_program_in_background program args =
-  let pid = Unix.fork () in
-  match pid with
-  | 0 ->
-    (* Child process *)
-    let dev_null = Unix.openfile "/dev/null" [ O_WRONLY ] 0o666 in
-    Unix.dup2 dev_null Unix.stdout;
-    Unix.dup2 dev_null Unix.stderr;
-    Unix.close dev_null;
-    Unix.execvp program (Array.of_list (program :: args))
-  | _ -> pid (* Parent process *)
-;;
-
 type driver = Gecko of string
 
 let prepare = function
@@ -70,9 +57,19 @@ let prepare = function
     driver
 ;;
 
-let run path args =
-  let pid = run_program_in_background path args in
-  (* Wait so we sure the server is up *)
-  Unix.sleepf 0.5;
-  pid
+let run_process path args =
+  let command = fmt "./%s" path in
+  let output_file = fmt "%s-output.txt" path in
+  let out_channel = open_out output_file in
+  let output_fd = Unix.descr_of_out_channel out_channel in
+  let pid =
+    Unix.create_process command (Array.of_list args) output_fd output_fd Unix.stdin
+  in
+  out_channel, pid
+;;
+
+let stop_process data =
+  let out_channel, pid = data in
+  close_out out_channel;
+  Unix.kill pid Sys.sigterm
 ;;
