@@ -57,13 +57,15 @@ type driver = Gecko of string
 
 let prepare = function
   | Gecko version_driver ->
-    let driver = "geckodriver" in
+    let driver = fmt "geckodriver-%s" version_driver in
     if not (Sys.file_exists driver)
     then (
       let archive = fmt "./gecko-%s.tar.gz" version_driver in
       Lwt_main.run (download_gecko_driver version_driver archive);
       (* TODO: Use native version instead of relying on Unix tools *)
       let _ = Sys.command (fmt "tar xvzf %s" archive) in
+      let _ = Sys.command (fmt "mv geckodriver %s" driver) in
+      let _ = Sys.command (fmt "rm %s" archive) in
       ());
     driver
 ;;
