@@ -58,6 +58,8 @@ let prepare = function
 
 let run_process path args =
   let command = fmt "./%s" path in
+  (* TODO: Log into a log/ folder
+   * + create file based on time of run *)
   let output_file = fmt "%s-output.txt" path in
   let out_channel = open_out output_file in
   let output_fd = Unix.descr_of_out_channel out_channel in
