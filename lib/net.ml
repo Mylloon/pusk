@@ -11,17 +11,25 @@ let send_post_request url json =
     (fun (_response, body) -> Cohttp_lwt.Body.to_string body)
 ;;
 
+let send_get_request url =
+  Lwt.bind
+    (Client.get (Uri.of_string url))
+    (fun (_response, body) -> Cohttp_lwt.Body.to_string body)
+;;
+
 let send_delete_request url =
   Lwt.bind
     (Client.delete (Uri.of_string url))
     (fun (_response, body) -> Cohttp_lwt.Body.to_string body)
 ;;
 
-let execute_request url json = Lwt_main.run (send_post_request url json)
+let execute_post_request url json = Lwt_main.run (send_post_request url json)
+let execute_get_request url = Lwt_main.run (send_get_request url)
+let execute_delete_request url = Lwt_main.run (send_delete_request url)
 
 (* Server MUST be started already *)
 let get_session () =
-  let response = execute_request (fmt "%s" driver_url) Json.connection_payload in
+  let response = execute_post_request (fmt "%s" driver_url) Json.connection_payload in
   match Yojson.Safe.from_string response with
   | `Assoc fields ->
     let value = List.assoc "value" fields in
@@ -35,9 +43,13 @@ let get_session () =
 ;;
 
 let close_session id =
-  Lwt_main.run (send_delete_request (fmt "%s/%s" driver_url id)) = "{\"value\":null}"
+  execute_delete_request (fmt "%s/%s" driver_url id) = "{\"value\":null}"
 ;;
 
 let navigate url session_id =
-  execute_request (fmt "%s/%s/url" driver_url session_id) (Json.navigate_payload url)
+  ignore
+    (execute_post_request
+       (fmt "%s/%s/url" driver_url session_id)
+       (Json.navigate_payload url));
+  execute_get_request (fmt "%s/%s/title" driver_url session_id)
 ;;

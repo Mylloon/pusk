@@ -13,7 +13,10 @@ let stop (driver_process, session_id) =
   stop_process driver_process
 ;;
 
-let main session_id = print_endline session_id
+let main session_id =
+  let body = navigate "https://twitter.com/i/flow/login" session_id in
+  print_endline body
+;;
 
 let () =
   let data = start (Gecko "0.33.0") in
