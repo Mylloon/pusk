@@ -2,7 +2,7 @@
 
 **WIP: It's not working**
 
-TODO: (as you can see, nothing has been done yet!)
+TODO:
 
 - [x] Download a driver
 - [x] Run a driver in background during the life of the app
