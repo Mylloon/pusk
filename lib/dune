@@ -1,4 +1,4 @@
 (library
  (name pusk)
- (modules utils selenium_init)
+ (modules utils drivers net)
  (libraries cohttp-lwt-unix))

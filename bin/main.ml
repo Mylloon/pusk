@@ -1,13 +1,30 @@
 open Pusk.Utils
-open Pusk.Selenium_init
+open Pusk.Net
+open Pusk.Drivers
 
-let main = ()
+let main =
+  let json_payload =
+    {|
+    {
+      "capabilities": {
+        "alwaysMatch": {
+          "moz:firefoxOptions": {
+            "args": ["-headless"]
+          }
+        }
+      }
+    }
+    |}
+  in
+  let body = send_post_request "http://localhost:4444/session" json_payload in
+  print_endline (Lwt_main.run body)
+;;
 
 let () =
-  let selenium = prepare "4.9.0" (Gecko "0.33.0") in
-  let selenium_pid = run selenium in
-  print_endline (fmt "Java running in %d" selenium_pid);
+  let driver = prepare (Gecko "0.33.0") in
+  let driver_pid = run driver [] in
+  print_endline (fmt "Driver running as %d" driver_pid);
   main;
-  let closed_pid = close selenium_pid in
+  let closed_pid = close driver_pid in
   print_endline (fmt "Program %d closed!" closed_pid)
 ;;
