@@ -9,15 +9,14 @@ let start driver =
 ;;
 
 let stop (driver_process, session_id) =
-  let data = close_session session_id in
-  print_endline data;
+  if not (close_session session_id) then print_endline "Can't close the session";
   stop_process driver_process
 ;;
 
-let main () = ()
+let main session_id = print_endline session_id
 
 let () =
   let data = start (Gecko "0.33.0") in
-  main ();
+  main (snd data);
   stop data
 ;;

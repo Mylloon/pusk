@@ -22,12 +22,19 @@ let execute_request url json =
 ;;
 
 let get_session () =
-  let body = execute_request (fmt "%s/session" url) Json.connection_payload in
-  print_endline body;
-  body
+  let response = execute_request (fmt "%s/session" url) Json.connection_payload in
+  match Yojson.Safe.from_string response with
+  | `Assoc fields ->
+    let value = List.assoc "value" fields in
+    let rec find_session_id = function
+      | ("sessionId", `String session_id) :: _ -> session_id
+      | _ :: rest -> find_session_id rest
+      | [] -> failwith "Session ID not found"
+    in
+    find_session_id (Yojson.Safe.Util.to_assoc value)
+  | _ -> failwith "Invalid JSON"
 ;;
 
-(* match Yojson.Safe.from_string body with
-  | _ as e -> print_endline e *)
-
-let close_session id = Lwt_main.run (send_delete_request (fmt "%s/session/%s" url id))
+let close_session id =
+  Lwt_main.run (send_delete_request (fmt "%s/session/%s" url id)) = "{\"value\":null}"
+;;
