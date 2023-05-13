@@ -22,7 +22,7 @@ $ opam switch list
 ```
 
 ```sh
-$ opam install cohttp-lwt-unix tls-lwt dotenv
+$ opam install cohttp-lwt-unix tls-lwt dotenv twostep
 ```
 
 ## Name history

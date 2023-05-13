@@ -25,7 +25,7 @@ let main ctx =
     | None, Some _ -> raise (Any "Username not set")
     | Some _, None -> raise (Any "Password not set")
   in
-  login_twitter ctx username password
+  login_twitter ctx username password (Sys.getenv_opt "TWITTER_TOTP")
 ;;
 
 let () =

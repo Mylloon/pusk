@@ -1,7 +1,8 @@
 open Pusk.Net
 open Pusk.Utils
+(* open Twostep *)
 
-let login_twitter ctx username password =
+let login_twitter ctx username password _secret =
   (* Navigate to login page and wait for page loaded*)
   ignore (navigate ctx.session_id "https://twitter.com/i/flow/login");
   Unix.sleep 5;
@@ -42,5 +43,14 @@ let login_twitter ctx username password =
   send_keys ctx.session_id input_password password;
   Unix.sleep 1;
   send_keys ctx.session_id input_password Keys.return;
-  Unix.sleep 5
+  Unix.sleep 5;
+  (* Detection of 2FA *)
+  (* TODO *)
+  (* Generate code if possible *)
+  (* let code =
+    match secret with
+    | Some seed -> Twostep.TOTP.code ~secret:seed ()
+    | None -> raise (Any "No TOTP code given, but TOTP required")
+  in *)
+  ()
 ;;
