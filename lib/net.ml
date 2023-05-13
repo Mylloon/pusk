@@ -37,10 +37,10 @@ let get_session () =
     let rec find_session_id = function
       | ("sessionId", `String session_id) :: _ -> session_id
       | _ :: rest -> find_session_id rest
-      | [] -> failwith "Session ID not found"
+      | [] -> raise (Any "Session ID not found")
     in
     find_session_id (Yojson.Safe.Util.to_assoc value)
-  | _ -> failwith "get_session | Invalid JSON"
+  | _ -> raise (Any "get_session | Invalid JSON")
 ;;
 
 let close_session id = execute_delete_request (driver id) = "{\"value\":null}"
@@ -61,8 +61,8 @@ let rec wait_for_load session_id =
       then (
         Unix.sleep 1;
         wait_for_load session_id)
-    | _ -> failwith "Error when waiting for page to load")
-  | _ -> failwith "wait_for_load | Invalid JSON"
+    | _ -> raise (Any "Error when waiting for page to load"))
+  | _ -> raise (Any "wait_for_load | Invalid JSON")
 ;;
 
 let navigate ?(wait = true) url session_id =

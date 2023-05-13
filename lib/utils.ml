@@ -1,3 +1,5 @@
+exception Any of string
+
 let fmt = Printf.sprintf
 
 let load_dotenv =

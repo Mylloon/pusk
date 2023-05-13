@@ -15,7 +15,7 @@ let rec download uri dest =
       let uri = Uri.of_string url in
       let redirect_url = Uri.resolve "" uri uri in
       download redirect_url dest
-    | None -> failwith "Redirect location not found")
+    | None -> raise (Any "Redirect location not found"))
   else if Cohttp.Code.is_success code
   then (
     print_endline "Downloading...";
@@ -28,8 +28,8 @@ let rec download uri dest =
     print_endline "Download done!";
     Lwt.return_unit)
   else
-    failwith
-      ("Failed to download file. HTTP status: " ^ Cohttp.Code.string_of_status status)
+    raise
+      (Any ("Failed to download file. HTTP status: " ^ Cohttp.Code.string_of_status status))
 ;;
 
 let download_gecko_driver version output =

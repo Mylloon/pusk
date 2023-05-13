@@ -2,8 +2,6 @@ open Pusk.Net
 open Pusk.Drivers
 open Pusk.Utils
 
-exception Any of string
-
 let start driver =
   let name_driver = prepare driver in
   let data_driver = run_process name_driver [] in
