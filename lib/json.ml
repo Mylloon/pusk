@@ -1,3 +1,5 @@
+open Utils
+
 let connection_payload =
   {|
   {
@@ -11,3 +13,9 @@ let connection_payload =
   }
   |}
 ;;
+
+let navigate_payload url = fmt {|
+  {
+    "url": "%s"
+  }
+  |} url
