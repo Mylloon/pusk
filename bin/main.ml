@@ -1,23 +1,11 @@
 open Pusk.Utils
+open Pusk
 open Pusk.Net
 open Pusk.Drivers
 
 let main =
-  let json_payload =
-    {|
-    {
-      "capabilities": {
-        "alwaysMatch": {
-          "moz:firefoxOptions": {
-            "args": ["-headless"]
-          }
-        }
-      }
-    }
-    |}
-  in
-  let body = send_post_request "http://localhost:4444/session" json_payload in
-  print_endline (Lwt_main.run body)
+  let body = execute_request "http://localhost:4444/session" Json.connection_payload in
+  print_endline body
 ;;
 
 let () =
