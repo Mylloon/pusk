@@ -1,4 +1,5 @@
 (executable
  (public_name pusk)
  (name main)
+ (modules main twitter)
  (libraries pusk))

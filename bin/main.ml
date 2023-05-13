@@ -1,6 +1,7 @@
 open Pusk.Net
 open Pusk.Drivers
 open Pusk.Utils
+open Twitter
 
 let start driver =
   let name_driver = prepare driver in
@@ -14,7 +15,7 @@ let stop (driver_process, session_id) =
   stop_process driver_process
 ;;
 
-let main session_id =
+let main ctx =
   (* Load credentials *)
   load_dotenv;
   let username, password =
@@ -24,17 +25,13 @@ let main session_id =
     | None, Some _ -> raise (Any "Username not set")
     | Some _, None -> raise (Any "Password not set")
   in
-  (* Navigate to login page *)
-  ignore (navigate "https://twitter.com/i/flow/login" session_id);
-  (* Extra wait to be sure the page is loaded *)
-  Unix.sleep 5;
-  (* DEBUG *)
-  print_endline (fmt "%s:%s" username password)
+  login_twitter ctx username password
 ;;
 
 let () =
   let data = start (Gecko "0.33.0") in
-  (try main (snd data) with
+  let ctx = { session_id = snd data } in
+  (try main ctx with
   | Any why -> print_endline why);
   stop data
 ;;
