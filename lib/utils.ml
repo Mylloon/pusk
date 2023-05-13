@@ -17,3 +17,7 @@ let keys_to_typing str =
   in
   aux [] (String.length str)
 ;;
+
+module Keys = struct
+  let return = "\\ue006"
+end

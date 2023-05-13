@@ -113,10 +113,8 @@ let find session_id strategy =
 ;;
 
 let send_keys session_id element_id username =
-  let response =
-    execute_post_request
-      (fmt "%s/element/%s/value" (driver session_id) element_id)
-      (Json.send_keys_payload username)
-  in
-  print_endline response
+  ignore
+    (execute_post_request
+       (fmt "%s/element/%s/value" (driver session_id) element_id)
+       (Json.send_keys_payload username))
 ;;
