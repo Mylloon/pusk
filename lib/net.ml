@@ -29,8 +29,10 @@ let execute_get_request url = Lwt_main.run (send_get_request url)
 let execute_delete_request url = Lwt_main.run (send_delete_request url)
 
 (* Server MUST be started already *)
-let get_session () =
-  let response = execute_post_request (fmt "%s" driver_url) Json.connection_payload in
+let get_session ?(headless = true) () =
+  let response =
+    execute_post_request (fmt "%s" driver_url) (Json.connection_payload headless)
+  in
   match Yojson.Safe.from_string response with
   | `Assoc fields ->
     let value = List.assoc "value" fields in
@@ -91,7 +93,30 @@ let find session_id strategy =
   match Yojson.Safe.from_string response with
   | `Assoc fields ->
     (match List.assoc "value" fields with
-    | `List l -> Some l
-    | _ -> None)
+    | `List l ->
+      List.fold_left
+        (fun acc x ->
+          match x with
+          | `Assoc subfields ->
+            List.fold_left
+              (fun acc' (_, value) ->
+                match value with
+                | `String str -> str :: acc'
+                | _ -> acc')
+              acc
+              subfields
+          | _ -> acc)
+        []
+        l
+    | _ -> [])
   | _ -> raise (Any "wait_for_load | Invalid JSON")
+;;
+
+let send_keys session_id element_id username =
+  let response =
+    execute_post_request
+      (fmt "%s/element/%s/value" (driver session_id) element_id)
+      (Json.send_keys_payload username)
+  in
+  print_endline response
 ;;

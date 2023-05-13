@@ -6,7 +6,7 @@ open Twitter
 let start driver =
   let name_driver = prepare driver in
   let data_driver = run_process name_driver [] in
-  let session_id = get_session () in
+  let session_id = get_session (* ~headless:false *) () in
   data_driver, session_id
 ;;
 
