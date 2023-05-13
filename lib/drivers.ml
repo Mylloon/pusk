@@ -62,7 +62,7 @@ let run_process path args =
   let out_channel = open_out output_file in
   let output_fd = Unix.descr_of_out_channel out_channel in
   let pid =
-    Unix.create_process command (Array.of_list args) output_fd output_fd Unix.stdin
+    Unix.create_process command (Array.of_list args) output_fd output_fd output_fd
   in
   out_channel, pid
 ;;
