@@ -50,10 +50,9 @@ let prepare = function
       let archive = fmt "./gecko-%s.tar.gz" version_driver in
       Lwt_main.run (download_gecko_driver version_driver archive);
       (* TODO: Use native version instead of relying on Unix tools *)
-      let _ = Sys.command (fmt "tar xvzf %s" archive) in
-      let _ = Sys.command (fmt "mv geckodriver %s" driver) in
-      let _ = Sys.command (fmt "rm %s" archive) in
-      ());
+      ignore (Sys.command (fmt "tar xvzf %s" archive));
+      ignore (Sys.command (fmt "mv geckodriver %s" driver));
+      ignore (Sys.command (fmt "rm %s" archive)));
     driver
 ;;
 
