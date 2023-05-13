@@ -51,6 +51,12 @@ let execute_sync session_id src =
     (Json.execute_payload src)
 ;;
 
+type strategy = XPath of string
+
+let get_strategy = function
+  | XPath xpath -> "xpath", xpath
+;;
+
 let rec wait_for_load session_id =
   let response = execute_sync session_id "return document.readyState" in
   match Yojson.Safe.from_string response with
@@ -65,7 +71,7 @@ let rec wait_for_load session_id =
   | _ -> raise (Any "wait_for_load | Invalid JSON")
 ;;
 
-let navigate ?(wait = true) url session_id =
+let navigate ?(wait = true) session_id url =
   let res =
     execute_post_request (fmt "%s/url" (driver session_id)) (Json.navigate_payload url)
   in
@@ -74,3 +80,18 @@ let navigate ?(wait = true) url session_id =
 ;;
 
 let screenshot session_id = execute_get_request (fmt "%s/screenshot" (driver session_id))
+
+let find session_id strategy =
+  let engine, search = get_strategy strategy in
+  let response =
+    execute_post_request
+      (fmt "%s/elements" (driver session_id))
+      (Json.find_payload engine search)
+  in
+  match Yojson.Safe.from_string response with
+  | `Assoc fields ->
+    (match List.assoc "value" fields with
+    | `List l -> Some l
+    | _ -> None)
+  | _ -> raise (Any "wait_for_load | Invalid JSON")
+;;

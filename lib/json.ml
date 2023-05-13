@@ -26,3 +26,12 @@ let execute_payload src = fmt {|
     "args": []
   }
   |} src
+
+let find_payload strategy value =
+  fmt {|
+  {
+    "using": "%s",
+    "value": "%s"
+  }
+  |} strategy value
+;;
