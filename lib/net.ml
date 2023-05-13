@@ -40,7 +40,7 @@ let get_session () =
       | [] -> failwith "Session ID not found"
     in
     find_session_id (Yojson.Safe.Util.to_assoc value)
-  | _ -> failwith "Invalid JSON"
+  | _ -> failwith "get_session | Invalid JSON"
 ;;
 
 let close_session id = execute_delete_request (driver id) = "{\"value\":null}"
@@ -61,8 +61,8 @@ let rec wait_for_load session_id =
       then (
         Unix.sleep 1;
         wait_for_load session_id)
-    | _ -> failwith "Error when waiting for load")
-  | _ -> failwith "Invalid JSON"
+    | _ -> failwith "Error when waiting for page to load")
+  | _ -> failwith "wait_for_load | Invalid JSON"
 ;;
 
 let navigate ?(wait = true) url session_id =
