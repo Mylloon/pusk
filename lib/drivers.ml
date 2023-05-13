@@ -76,5 +76,3 @@ let run path args =
   Unix.sleepf 0.5;
   pid
 ;;
-
-let close pid = fst (Unix.waitpid [] pid)
