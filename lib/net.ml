@@ -53,10 +53,13 @@ let execute_sync session_id src =
     (Json.execute_payload src)
 ;;
 
-type strategy = XPath of string
+type strategy =
+  | XPath of string
+  | CSS of string
 
 let get_strategy = function
   | XPath xpath -> "xpath", xpath
+  | CSS css -> "css selector", css
 ;;
 
 let rec wait_for_load session_id =
