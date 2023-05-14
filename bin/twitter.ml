@@ -1,6 +1,5 @@
 open Pusk.Net
 open Pusk.Utils
-(* open Twostep *)
 
 type credentials =
   { username : string
@@ -65,7 +64,16 @@ let rec _inject_password session_id creds try_count =
 
 let inject_password session_id creds = _inject_password session_id creds 1
 
-let login_twitter ctx username password _secret =
+let inject_2fa _session_id secret _entry =
+  let _code =
+    match secret with
+    | Some seed -> Twostep.TOTP.code ~secret:seed ()
+    | None -> raise (Any "No TOTP code given, but TOTP required")
+  in
+  ()
+;;
+
+let login_twitter ctx username password secret =
   (* Navigate to login page and wait for page loaded*)
   ignore (navigate ctx.session_id "https://twitter.com/i/flow/login");
   Unix.sleep 5;
@@ -75,12 +83,10 @@ let login_twitter ctx username password _secret =
   (* Find password input *)
   inject_password ctx.session_id creds;
   (* Detection of 2FA *)
-  (* TODO *)
-  (* Generate code if possible *)
-  (* let code =
-    match secret with
-    | Some seed -> Twostep.TOTP.code ~secret:seed ()
-    | None -> raise (Any "No TOTP code given, but TOTP required")
-  in *)
-  ()
+  match find ctx.session_id (XPath "XPATH_TOTP") with
+  | [] -> ()
+  | _ as l ->
+    if List.length l > 1
+    then raise (Any "Too many element found as the username input")
+    else inject_2fa ctx.session_id secret (List.nth l 0)
 ;;
