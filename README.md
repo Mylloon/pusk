@@ -1,6 +1,6 @@
 # Pusk
 
-**WIP: It's not working**
+**WIP: It's not working yet**
 
 TODO:
 
