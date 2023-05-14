@@ -72,7 +72,7 @@ let login_twitter ctx username password secret =
   inject_username ctx.session_id creds;
   (* Find password input *)
   inject_password ctx.session_id creds;
-  (* Detection of 2FA *)
+  (* Detection and injection of 2FA code if needed *)
   match find ctx.session_id (CSS "input[name='text']") with
   | [] -> print_endline "Doesn't use 2FA as no input found"
   | _ as l ->
