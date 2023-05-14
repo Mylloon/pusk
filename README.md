@@ -7,7 +7,7 @@ TODO:
 - [x] Download a driver
 - [x] Run a driver in background during the life of the app
 - [x] [Figuring out how to use drivers](https://w3c.github.io/webdriver/#endpoints)
-- [ ] Login to Twitter.com
+- [x] Login to Twitter.com
 - [ ] Check if latest tweet of user is more or less old than 30 days
 - [ ] Then tweet if needed something like "Don't delete my account please"
 - [x] Close everything properly
