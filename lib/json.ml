@@ -1,5 +1,7 @@
 open Utils
 
+let empty = "{}"
+
 let connection_payload headless =
   fmt
     {|

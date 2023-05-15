@@ -80,3 +80,16 @@ let login_twitter ctx username password secret =
     then raise (Any "Too many elements found as 2FA input")
     else inject_2fa ctx.session_id secret (List.nth l 0)
 ;;
+
+let go_to_profile ctx =
+  let profile_button =
+    match find ctx.session_id (XPath "//a[@data-testid='AppTabBar_Profile_Link']") with
+    | [] -> raise (Any (fmt "Profile button not found"))
+    | _ as l ->
+      if List.length l > 1
+      then raise (Any "Too many profile button found")
+      else List.nth l 0
+  in
+  click ctx.session_id profile_button;
+  Unix.sleep 4
+;;

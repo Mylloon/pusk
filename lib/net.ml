@@ -115,9 +115,16 @@ let find session_id strategy =
   | _ -> raise (Any "wait_for_load | Invalid JSON")
 ;;
 
-let send_keys session_id element_id username =
+let send_keys session_id element_id data =
   ignore
     (execute_post_request
        (fmt "%s/element/%s/value" (driver session_id) element_id)
-       (Json.send_keys_payload username))
+       (Json.send_keys_payload data))
+;;
+
+let click session_id element_id =
+  ignore
+    (execute_post_request
+       (fmt "%s/element/%s/click" (driver session_id) element_id)
+       Json.empty)
 ;;
