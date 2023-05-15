@@ -41,7 +41,7 @@ let rec check ctx =
     (* Tweet and returns to profile page *)
     tweet
       ctx
-      "This tweet is for the Twitter's CTO: Don't suspend my account for inactivity.";
+      "This tweet is for the Twitter's CTO: don't suspend my account for inactivity.";
     go_to_profile ctx;
     (* Wait the maximum time since we just tweeted *)
     recheck max_time)
