@@ -1,15 +1,11 @@
 # Pusk
 
-**WIP: It's not working yet**
-
-TODO:
-
 - [x] Download a driver
 - [x] Run a driver in background during the life of the app
 - [x] [Figuring out how to use drivers](https://w3c.github.io/webdriver/#endpoints)
 - [x] Login to Twitter.com
-- [ ] Check if latest tweet of user is more or less old than 30 days
-- [ ] Then tweet if needed something like "Don't delete my account please"
+- [x] Check if latest tweet of user is more or less old than 30 days
+- [x] Then tweet if needed something like "Don't delete my account please"
 - [x] Close everything properly
 - [ ] Maybe create a docker image for easy deployment?
 
