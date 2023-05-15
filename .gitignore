@@ -1,4 +1,5 @@
 _build/
+/docker-compose.yml
 
 /selenium-*.jar
 /gecko-*.tar.gz
