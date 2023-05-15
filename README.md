@@ -1,5 +1,7 @@
 # Pusk
 
+Send a tweet to prevent Twitter from closing your account.
+
 ## Requirements
 
 ```opam
