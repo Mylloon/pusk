@@ -13,7 +13,7 @@ version: "3.9"
 
 services:
   pusk:
-    build: .
+    image: git.mylloon.fr/Anri/pusk:latest
     container_name: Pusk
     environment:
       - TWITTER_USERNAME=yourusername # not your mail
