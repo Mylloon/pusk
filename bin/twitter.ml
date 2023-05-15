@@ -134,4 +134,15 @@ let find_latest_tweet ctx =
     Some (List.fold_left max min_int datetimes)
 ;;
 
-let tweet _ctx _msg = ()
+let tweet ctx _msg =
+  let tweet_button =
+    match find ctx.session_id (XPath "//a[@data-testid='SideNav_NewTweet_Button']") with
+    | [] -> raise (Any (fmt "Tweet button not found"))
+    | _ as l ->
+      if List.length l > 1
+      then raise (Any "Too many tweet button found")
+      else List.nth l 0
+  in
+  click ctx.session_id tweet_button;
+  Unix.sleep 4
+;;
