@@ -128,3 +128,16 @@ let click session_id element_id =
        (fmt "%s/element/%s/click" (driver session_id) element_id)
        Json.empty)
 ;;
+
+let get_url session_id button_id =
+  let response =
+    execute_get_request (fmt "%s/element/%s/attribute/href" (driver session_id) button_id)
+  in
+  match Yojson.Safe.from_string response with
+  | `Assoc fields ->
+    (match List.assoc "value" fields with
+    | `String href -> href
+    | _ as e ->
+      raise (Any (fmt "Unexpected response from driver: %s" (Yojson.Safe.to_string e))))
+  | _ -> raise (Any "get_url | Invalid JSON")
+;;

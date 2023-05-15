@@ -95,6 +95,11 @@ let go_to_profile ctx =
       then raise (Any "Too many profile button found")
       else List.nth l 0
   in
-  click ctx.session_id profile_button;
-  Unix.sleep 4
+  ignore
+    (navigate
+       ctx.session_id
+       (fmt "https://twitter.com%s/with_replies" (get_url ctx.session_id profile_button)));
+  Unix.sleep 2
 ;;
+
+let find_latest_tweet = ()
