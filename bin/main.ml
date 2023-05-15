@@ -38,7 +38,11 @@ let rec check ctx =
   in
   if 0 = timeout
   then (
-    print_endline "TODO: We are tweeting here. :)";
+    (* Tweet and returns to profile page *)
+    tweet
+      ctx
+      "This tweet is for the Twitter's CTO: Don't suspend my account for inactivity.";
+    go_to_profile ctx;
     (* Wait the maximum time since we just tweeted *)
     recheck max_time)
   else (* Wait the amount of time calculated from the post *)

@@ -133,3 +133,5 @@ let find_latest_tweet ctx =
     (* Returns the most recent date *)
     Some (List.fold_left max min_int datetimes)
 ;;
+
+let tweet _ctx _msg = ()
