@@ -11,7 +11,7 @@ $ opam switch list
 ### Install dependencies
 
 ```sh
-dune describe external-lib-deps | awk '/external_deps/{flag=1;next}/))/{flag=0}flag' | tr -d '()' | tr -s '\n' ' ' | sed 's/required//g' | xargs opam install -y
+dune describe external-lib-deps | sed -n '/external_deps/,/))/p' | sed -e 's/[()]//g' -e 's/required//g' -e '/external_deps/d' | xargs -n1 opam install -y
 ```
 
 ## Name history
