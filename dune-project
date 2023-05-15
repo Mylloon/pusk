@@ -17,7 +17,15 @@
  (name pusk)
  (synopsis "Twitter bot")
  (description "Send tweet peridically to avoid ban from Elon")
- (depends ocaml dune)
+ (depends
+  ocaml
+  dune
+  (cohttp-lwt-unix
+   (>= 5.1))
+  (dotenv
+   (>= 0.0))
+  (twostep
+   (>= 1.0)))
  (tags
   (api twitter)))
 

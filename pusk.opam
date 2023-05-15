@@ -9,6 +9,9 @@ tags: ["api" "twitter"]
 depends: [
   "ocaml"
   "dune" {>= "3.7"}
+  "cohttp-lwt-unix" {>= "5.1"}
+  "dotenv" {>= "0.0"}
+  "twostep" {>= "1.0"}
   "odoc" {with-doc}
 ]
 build: [
