@@ -19,7 +19,7 @@ services:
       - TWITTER_USERNAME=yourusername # not your mail
       - TWITTER_PASSWORD=yourpassword
       - TWITTER_TOTP=yourseed # optional if you don't have 2fa
-      - PUSK_DEBUG=false # optional
+      - PUSK_DEBUG=FALSE # optional
     restart: unless-stopped
 ```
 
@@ -28,7 +28,7 @@ services:
 - You will need these dependencies:
 
   ```sh
-  $ opam install cohttp-lwt-unix tls-lwt dotenv twostep lwt_ssl
+  $ opam install cohttp-lwt-unix tls-lwt dotenv twostep lwt_ssl yojson
   ```
 
 - Populate your credentials in [config/.env](./config/.env)
