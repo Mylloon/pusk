@@ -127,8 +127,9 @@ let find_latest_tweet ctx =
             Core.Time.of_string_with_utc_offset
               (get_attribute ctx.session_id date "datetime")
           in
-          Core.Time.to_span_since_epoch time |> Core.Time.Span.to_sec |> Float.to_int)
+          Float.to_int (Core.Time.Span.to_sec (Core.Time.to_span_since_epoch time)))
         dates
     in
+    (* Returns the most recent date *)
     Some (List.fold_left max min_int datetimes)
 ;;
