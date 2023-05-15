@@ -99,7 +99,7 @@ let go_to_profile ctx =
     (navigate
        ctx.session_id
        (fmt "https://twitter.com%s/with_replies" (get_url ctx.session_id profile_button)));
-  Unix.sleep 2
+  Unix.sleep 4
 ;;
 
 let find_latest_tweet = ()
