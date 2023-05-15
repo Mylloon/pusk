@@ -28,8 +28,17 @@ let main ctx =
   login_twitter ctx username password (Sys.getenv_opt "TWITTER_TOTP")
 ;;
 
+let handler data (signal : int) =
+  stop_process data;
+  exit
+    (match signal with
+    | v when v = Sys.sigint -> 130
+    | _ -> 1)
+;;
+
 let () =
   let data = start (Gecko "0.33.0") in
+  Sys.set_signal Sys.sigint (Sys.Signal_handle (handler (fst data)));
   let ctx = { session_id = snd data } in
   (try main ctx with
   | Any why -> print_endline why);
