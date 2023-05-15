@@ -19,13 +19,17 @@ let rec check ctx =
   (* Loop *)
   let max_time = 2505600 (* 29 days *) in
   let recheck timeout =
+    if ctx.debug
+    then print_endline (fmt "Waiting for the next check in %d seconds" timeout);
     Unix.sleep timeout;
+    if ctx.debug then print_endline "Refresh profile page...";
     refresh_page ctx.session_id;
     Unix.sleep 4;
     check ctx
   in
   (* Time to wait until next check *)
   let timeout =
+    if ctx.debug then print_endline "Check latest tweets...";
     match find_latest_tweet ctx with
     | Some tweet_date ->
       (* Get date of tweet and return time to wait before tweeting *)
@@ -34,15 +38,17 @@ let rec check ctx =
       if diff > max_time
       then 0 (* Timeout expired *)
       else max_time - diff (* Timeout for when it will expire *)
-    | None -> 0
+    | None ->
+      if ctx.debug then print_endline "No tweets found...";
+      0
   in
   if 0 = timeout
   then (
+    if ctx.debug then print_endline "Tweeting...";
     (* Tweet and returns to profile page *)
     tweet
       ctx
       "This tweet is for the Twitter's CTO: don't suspend my account for inactivity.";
-    go_to_profile ctx;
     (* Wait the maximum time since we just tweeted *)
     recheck max_time)
   else (* Wait the amount of time calculated from the post *)
@@ -50,8 +56,6 @@ let rec check ctx =
 ;;
 
 let main ctx =
-  (* Load credentials *)
-  load_dotenv;
   let username, password =
     match Sys.getenv_opt "TWITTER_USERNAME", Sys.getenv_opt "TWITTER_PASSWORD" with
     | Some u, Some p -> u, p
@@ -62,6 +66,7 @@ let main ctx =
   login_twitter ctx username password (Sys.getenv_opt "TWITTER_TOTP");
   go_to_profile ctx;
   (* Start check routine *)
+  if ctx.debug then print_endline "Start routine...";
   check ctx
 ;;
 
@@ -76,7 +81,17 @@ let handler data (signal : int) =
 let () =
   let data = start (Gecko "0.33.0") in
   Sys.set_signal Sys.sigint (Sys.Signal_handle (handler (fst data)));
-  let ctx = { session_id = snd data } in
+  (* Load env variables *)
+  load_dotenv;
+  let ctx =
+    { session_id = snd data
+    ; debug =
+        (match Sys.getenv_opt "PUSK_DEBUG" with
+        | Some boolean -> if String.lowercase_ascii boolean = "true" then true else false
+        | None -> false)
+    }
+  in
+  if ctx.debug then print_endline "Logging is enabled";
   (try main ctx with
   | Any why -> print_endline why);
   stop data

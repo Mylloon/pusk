@@ -2,7 +2,10 @@ exception Any of string
 
 let fmt = Printf.sprintf
 
-type context = { session_id : string }
+type context =
+  { session_id : string
+  ; debug : bool
+  }
 
 let load_dotenv =
   (* Load variables *)

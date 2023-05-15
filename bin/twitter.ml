@@ -69,13 +69,16 @@ let inject_2fa session_id secret input =
 ;;
 
 let login_twitter ctx username password secret =
+  if ctx.debug then print_endline "Login to twitter...";
   (* Navigate to login page and wait for page loaded*)
   ignore (navigate ctx.session_id "https://twitter.com/i/flow/login");
   Unix.sleep 5;
   let creds = { username; password } in
   (* Insert the username *)
+  if ctx.debug then print_endline "Type username...";
   inject_username ctx.session_id creds;
   (* Find password input *)
+  if ctx.debug then print_endline "Type password...";
   inject_password ctx.session_id creds;
   (* Detection and injection of 2FA code if needed *)
   match find ctx.session_id (CSS "input[name='text']") with
@@ -83,10 +86,13 @@ let login_twitter ctx username password secret =
   | _ as l ->
     if List.length l > 1
     then raise (Any "Too many elements found as 2FA input")
-    else inject_2fa ctx.session_id secret (List.nth l 0)
+    else (
+      if ctx.debug then print_endline "Type 2FA code...";
+      inject_2fa ctx.session_id secret (List.nth l 0))
 ;;
 
 let go_to_profile ctx =
+  if ctx.debug then print_endline "Locate profile button...";
   let profile_button =
     match find ctx.session_id (XPath "//a[@data-testid='AppTabBar_Profile_Link']") with
     | [] -> raise (Any (fmt "Profile button not found"))
@@ -95,6 +101,7 @@ let go_to_profile ctx =
       then raise (Any "Too many profile button found")
       else List.nth l 0
   in
+  if ctx.debug then print_endline "Navigate to user replies...";
   ignore
     (navigate
        ctx.session_id
