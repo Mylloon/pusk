@@ -30,6 +30,11 @@ let rec _inject_password session_id creds try_count =
     match find session_id (CSS "input[name='password']") with
     | [] ->
       (* Retry to inject username with the second page *)
+      (* NOTE: I think this is only when a email is first sent, so the second
+       * injection NEED to be a username (or phone number)
+       *
+       * Maybe allow user to provides us with username and email and use email
+       * by default and fallback to username in the second attempt *)
       inject_username session_id creds;
       _inject_password session_id creds (try_count - 1);
       None
