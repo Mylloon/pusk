@@ -102,4 +102,11 @@ let go_to_profile ctx =
   Unix.sleep 4
 ;;
 
-let find_latest_tweet = ()
+let find_latest_tweet ctx =
+  match find ctx.session_id (XPath "//article[@data-testid='tweet']") with
+  | [] -> None
+  | _ as tweets ->
+    (* TODO: Find latest tweet *)
+    List.iter print_endline tweets;
+    Some "" (* tmp *)
+;;

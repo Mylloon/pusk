@@ -15,6 +15,32 @@ let stop (driver_process, session_id) =
   stop_process driver_process
 ;;
 
+let rec check ctx =
+  (* Loop *)
+  let recheck timeout =
+    Unix.sleep timeout;
+    refresh_page ctx.session_id;
+    Unix.sleep 4;
+    check ctx
+  in
+  (* Time to wait until next check *)
+  let timeout =
+    match find_latest_tweet ctx with
+    | Some _tweet ->
+      (* TODO: Get date of tweet and return time to wait before tweeting
+       * (0 if we need to tweet) *)
+      30000000000000000
+    | None -> 0
+  in
+  if 0 = timeout
+  then (
+    print_endline "TODO: We are tweeting here. :)";
+    (* Wait the maximum time since we just tweeted *)
+    recheck 2505600 (* 29 days *))
+  else (* Wait the amount of time calculated from the post *)
+    recheck timeout
+;;
+
 let main ctx =
   (* Load credentials *)
   load_dotenv;
@@ -26,7 +52,9 @@ let main ctx =
     | Some _, None -> raise (Any "Password not set")
   in
   login_twitter ctx username password (Sys.getenv_opt "TWITTER_TOTP");
-  go_to_profile ctx
+  go_to_profile ctx;
+  (* Start check routine *)
+  check ctx
 ;;
 
 let handler data (signal : int) =

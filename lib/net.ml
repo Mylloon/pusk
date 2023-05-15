@@ -141,3 +141,8 @@ let get_url session_id button_id =
       raise (Any (fmt "Unexpected response from driver: %s" (Yojson.Safe.to_string e))))
   | _ -> raise (Any "get_url | Invalid JSON")
 ;;
+
+let refresh_page ?(wait = true) session_id =
+  ignore (execute_post_request (fmt "%s/refresh" (driver session_id)) Json.empty);
+  if wait then wait_for_load session_id
+;;
