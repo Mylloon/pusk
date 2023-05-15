@@ -17,6 +17,7 @@ let stop (driver_process, session_id) =
 
 let rec check ctx =
   (* Loop *)
+  let max_time = 2505600 (* 29 days *) in
   let recheck timeout =
     Unix.sleep timeout;
     refresh_page ctx.session_id;
@@ -27,17 +28,19 @@ let rec check ctx =
   let timeout =
     match find_latest_tweet ctx with
     | Some tweet_date ->
-      (* TODO: Get date of tweet and return time to wait before tweeting
-       * (0 if we need to tweet) *)
-      print_endline (fmt "latest tweet date: %d" tweet_date);
-      30000000000000000
+      (* Get date of tweet and return time to wait before tweeting *)
+      let now = Float.to_int (Unix.time ()) in
+      let diff = now - tweet_date in
+      if diff > max_time
+      then 0 (* Timeout expired *)
+      else max_time - diff (* Timeout for when it will expire *)
     | None -> 0
   in
   if 0 = timeout
   then (
     print_endline "TODO: We are tweeting here. :)";
     (* Wait the maximum time since we just tweeted *)
-    recheck 2505600 (* 29 days *))
+    recheck max_time)
   else (* Wait the amount of time calculated from the post *)
     recheck timeout
 ;;
