@@ -26,9 +26,10 @@ let rec check ctx =
   (* Time to wait until next check *)
   let timeout =
     match find_latest_tweet ctx with
-    | Some _tweet ->
+    | Some tweet_date ->
       (* TODO: Get date of tweet and return time to wait before tweeting
        * (0 if we need to tweet) *)
+      print_endline (fmt "latest tweet date: %d" tweet_date);
       30000000000000000
     | None -> 0
   in

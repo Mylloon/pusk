@@ -98,7 +98,9 @@ let go_to_profile ctx =
   ignore
     (navigate
        ctx.session_id
-       (fmt "https://twitter.com%s/with_replies" (get_url ctx.session_id profile_button)));
+       (fmt
+          "https://twitter.com%s/with_replies"
+          (get_attribute ctx.session_id profile_button "href")));
   Unix.sleep 4
 ;;
 
@@ -106,7 +108,27 @@ let find_latest_tweet ctx =
   match find ctx.session_id (XPath "//article[@data-testid='tweet']") with
   | [] -> None
   | _ as tweets ->
-    (* TODO: Find latest tweet *)
-    List.iter print_endline tweets;
-    Some "" (* tmp *)
+    (* Get dates attached to each tweets *)
+    let dates =
+      (* When a tweet is a RT, two dates are attached *)
+      List.flatten
+        (List.map
+           (fun tweet ->
+             match find_in_element ctx.session_id (CSS "time[datetime]") tweet with
+             | [] -> raise (Any (fmt "No dates found for tweet '%s'" tweet))
+             | _ as l -> l)
+           tweets)
+    in
+    (* Turn datetime from ISO 8601 format to epoch int *)
+    let datetimes =
+      List.map
+        (fun date ->
+          let date =
+            Core.Time.of_string_with_utc_offset
+              (get_attribute ctx.session_id date "datetime")
+          in
+          Core.Time.to_span_since_epoch date |> Core.Time.Span.to_sec |> Float.to_int)
+        dates
+    in
+    Some (List.fold_left max min_int datetimes)
 ;;

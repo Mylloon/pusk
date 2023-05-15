@@ -86,13 +86,7 @@ let navigate ?(wait = true) session_id url =
 
 let screenshot session_id = execute_get_request (fmt "%s/screenshot" (driver session_id))
 
-let find session_id strategy =
-  let engine, search = get_strategy strategy in
-  let response =
-    execute_post_request
-      (fmt "%s/elements" (driver session_id))
-      (Json.find_payload engine search)
-  in
+let parser response =
   match Yojson.Safe.from_string response with
   | `Assoc fields ->
     (match List.assoc "value" fields with
@@ -112,7 +106,27 @@ let find session_id strategy =
         []
         l
     | _ -> [])
-  | _ -> raise (Any "wait_for_load | Invalid JSON")
+  | _ -> raise (Any "finder parser | Invalid JSON")
+;;
+
+let find session_id strategy =
+  let engine, search = get_strategy strategy in
+  let response =
+    execute_post_request
+      (fmt "%s/elements" (driver session_id))
+      (Json.find_payload engine search)
+  in
+  parser response
+;;
+
+let find_in_element session_id strategy element =
+  let engine, search = get_strategy strategy in
+  let response =
+    execute_post_request
+      (fmt "%s/element/%s/elements" (driver session_id) element)
+      (Json.find_payload engine search)
+  in
+  parser response
 ;;
 
 let send_keys session_id element_id data =
@@ -129,9 +143,10 @@ let click session_id element_id =
        Json.empty)
 ;;
 
-let get_url session_id button_id =
+let get_attribute session_id element_id attribute =
   let response =
-    execute_get_request (fmt "%s/element/%s/attribute/href" (driver session_id) button_id)
+    execute_get_request
+      (fmt "%s/element/%s/attribute/%s" (driver session_id) element_id attribute)
   in
   match Yojson.Safe.from_string response with
   | `Assoc fields ->
@@ -139,7 +154,7 @@ let get_url session_id button_id =
     | `String href -> href
     | _ as e ->
       raise (Any (fmt "Unexpected response from driver: %s" (Yojson.Safe.to_string e))))
-  | _ -> raise (Any "get_url | Invalid JSON")
+  | _ -> raise (Any "get_attribute | Invalid JSON")
 ;;
 
 let refresh_page ?(wait = true) session_id =
