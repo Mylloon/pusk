@@ -70,7 +70,7 @@ let rec wait_for_load session_id =
     | `String res ->
       if not (res = "complete")
       then (
-        Unix.sleep 1;
+        Unix.sleep 2;
         wait_for_load session_id)
     | _ -> raise (Any "Error when waiting for page to load"))
   | _ -> raise (Any "wait_for_load | Invalid JSON")

@@ -19,9 +19,9 @@ let inject_username session_id creds =
   in
   (* Insert the username *)
   send_keys session_id input_username creds.username;
-  Unix.sleep 1;
+  Unix.sleep 2;
   send_keys session_id input_username Keys.return;
-  Unix.sleep 3
+  Unix.sleep 6
 ;;
 
 let rec _inject_password session_id creds try_count =
@@ -47,9 +47,9 @@ let rec _inject_password session_id creds try_count =
   | Some input ->
     (* Insert password *)
     send_keys session_id input creds.password;
-    Unix.sleep 1;
+    Unix.sleep 2;
     send_keys session_id input Keys.return;
-    Unix.sleep 3
+    Unix.sleep 6
   | None -> ()
 ;;
 
@@ -63,9 +63,9 @@ let inject_2fa session_id secret input =
   in
   (* Insert 2FA code *)
   send_keys session_id input code;
-  Unix.sleep 1;
+  Unix.sleep 2;
   send_keys session_id input Keys.return;
-  Unix.sleep 5
+  Unix.sleep 10
 ;;
 
 let login_twitter ctx username password secret =
@@ -108,7 +108,7 @@ let go_to_profile ctx =
        (fmt
           "https://twitter.com%s/with_replies"
           (get_attribute ctx.session_id profile_button "href")));
-  Unix.sleep 4
+  Unix.sleep 8
 ;;
 
 let find_latest_tweet ctx =
@@ -160,7 +160,7 @@ let tweet ctx msg =
       else List.nth l 0
   in
   send_keys ctx.session_id tweet_area msg;
-  Unix.sleep 1;
+  Unix.sleep 2;
   let send_tweet_button =
     match find ctx.session_id (XPath "//div[@data-testid='tweetButton']") with
     | [] -> raise (Any (fmt "Send-tweet button not found"))
@@ -170,5 +170,5 @@ let tweet ctx msg =
       else List.nth l 0
   in
   click ctx.session_id send_tweet_button;
-  Unix.sleep 4
+  Unix.sleep 8
 ;;

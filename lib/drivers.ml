@@ -66,7 +66,7 @@ let run_process path args =
   let pid =
     Unix.create_process command (Array.of_list args) output_fd output_fd output_fd
   in
-  Unix.sleepf 0.5;
+  Unix.sleep 1;
   out_channel, pid
 ;;
 

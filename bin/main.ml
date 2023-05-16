@@ -24,7 +24,7 @@ let rec check ctx =
     Unix.sleep timeout;
     if ctx.debug then print_endline "Refresh profile page...";
     refresh_page ctx.session_id;
-    Unix.sleep 4;
+    Unix.sleep 8;
     check ctx
   in
   (* Time to wait until next check *)
