@@ -22,6 +22,6 @@ RUN apk update && \
   apk add dumb-init firefox libc6-compat pcre-dev && \
   rm -rf /var/cache/apk/*
 
-COPY --from=builder /usr/src/pusk/_build/default/bin/pusk.exe /app/pusk
+COPY --from=builder /usr/src/pusk/_build/default/bin/main.exe /app/pusk
 
 CMD ["dumb-init", "./pusk"]
