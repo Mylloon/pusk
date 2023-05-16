@@ -17,7 +17,7 @@ services:
     container_name: Pusk
     environment:
       - TWITTER_USERNAME=yourusername # not your mail
-      - TWITTER_PASSWORD="yourpassword"
+      - TWITTER_PASSWORD=yourpassword # take care, you need to double $ signs in your password
       - TWITTER_TOTP=yourseed # optional if you don't have 2fa
       - PUSK_DEBUG=FALSE # optional
     restart: unless-stopped
