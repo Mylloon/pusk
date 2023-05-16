@@ -151,6 +151,7 @@ let tweet ctx msg =
       else List.nth l 0
   in
   click ctx.session_id tweet_button;
+  Unix.sleep 2;
   let tweet_area =
     match find ctx.session_id (CSS "div[data-testid='tweetTextarea_0']") with
     | [] -> raise (Any (fmt "Tweet area not found"))
