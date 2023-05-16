@@ -28,7 +28,7 @@ services:
 - You will need these dependencies:
 
   ```sh
-  $ opam install cohttp-lwt-unix tls-lwt dotenv twostep lwt_ssl yojson core
+  $ opam install cohttp-lwt-unix dotenv twostep lwt_ssl yojson core
   ```
 
 - Populate your credentials in [config/.env](./config/.env)
