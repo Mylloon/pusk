@@ -142,16 +142,8 @@ let find_latest_tweet ctx =
 ;;
 
 let tweet ctx msg =
-  let tweet_button =
-    match find ctx.session_id (XPath "//a[@data-testid='SideNav_NewTweet_Button']") with
-    | [] -> raise (Any (fmt "Tweet button not found"))
-    | _ as l ->
-      if List.length l > 1
-      then raise (Any "Too many tweet button found")
-      else List.nth l 0
-  in
-  click ctx.session_id tweet_button;
-  Unix.sleep 2;
+  ignore (navigate ctx.session_id "https://twitter.com/home");
+  Unix.sleep 4;
   let tweet_area =
     match find ctx.session_id (CSS "div[data-testid='tweetTextarea_0']") with
     | [] -> raise (Any (fmt "Tweet area not found"))
@@ -161,7 +153,7 @@ let tweet ctx msg =
   send_keys ctx.session_id tweet_area msg;
   Unix.sleep 2;
   let send_tweet_button =
-    match find ctx.session_id (XPath "//div[@data-testid='tweetButton']") with
+    match find ctx.session_id (XPath "//div[@data-testid='tweetButtonInline']") with
     | [] -> raise (Any (fmt "Tweet button not found"))
     | _ as l ->
       if List.length l > 1
