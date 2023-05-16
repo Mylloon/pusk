@@ -152,21 +152,19 @@ let tweet ctx msg =
   in
   click ctx.session_id tweet_button;
   let tweet_area =
-    match find ctx.session_id (XPath "//div[@data-testid='tweetTextarea_0']") with
-    | [] -> raise (Any (fmt "Tweet button not found"))
+    match find ctx.session_id (CSS "div[data-testid='tweetTextarea_0']") with
+    | [] -> raise (Any (fmt "Tweet area not found"))
     | _ as l ->
-      if List.length l > 1
-      then raise (Any "Too many tweet button found")
-      else List.nth l 0
+      if List.length l > 1 then raise (Any "Too many tweet areas found") else List.nth l 0
   in
   send_keys ctx.session_id tweet_area msg;
   Unix.sleep 2;
   let send_tweet_button =
     match find ctx.session_id (XPath "//div[@data-testid='tweetButton']") with
-    | [] -> raise (Any (fmt "Send-tweet button not found"))
+    | [] -> raise (Any (fmt "Tweet button not found"))
     | _ as l ->
       if List.length l > 1
-      then raise (Any "Too many send-tweet button found")
+      then raise (Any "Too many tweet button found")
       else List.nth l 0
   in
   click ctx.session_id send_tweet_button;
