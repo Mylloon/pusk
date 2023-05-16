@@ -1,6 +1,6 @@
 # Pusk [![status-badge](https://ci.mylloon.fr/api/badges/Anri/pusk/status.svg)](https://ci.mylloon.fr/Anri/pusk)
 
-Send a tweet to prevent Twitter from closing your account.
+Send a tweet to prevent Twitter from closing your account, using a webdriver.
 
 ## How to use?
 
