@@ -67,12 +67,12 @@ let rec wait_for_load session_id =
   match Yojson.Safe.from_string response with
   | `Assoc fields ->
     (match List.assoc "value" fields with
-    | `String res ->
-      if not (res = "complete")
-      then (
-        Unix.sleep 2;
-        wait_for_load session_id)
-    | _ -> raise (Any "Error when waiting for page to load"))
+     | `String res ->
+       if not (res = "complete")
+       then (
+         Unix.sleep 2;
+         wait_for_load session_id)
+     | _ -> raise (Any "Error when waiting for page to load"))
   | _ -> raise (Any "wait_for_load | Invalid JSON")
 ;;
 
@@ -90,22 +90,22 @@ let parser response =
   match Yojson.Safe.from_string response with
   | `Assoc fields ->
     (match List.assoc "value" fields with
-    | `List l ->
-      List.fold_left
-        (fun acc x ->
-          match x with
-          | `Assoc subfields ->
-            List.fold_left
-              (fun acc' (_, value) ->
-                match value with
-                | `String str -> str :: acc'
-                | _ -> acc')
-              acc
-              subfields
-          | _ -> acc)
-        []
-        l
-    | _ -> [])
+     | `List l ->
+       List.fold_left
+         (fun acc x ->
+           match x with
+           | `Assoc subfields ->
+             List.fold_left
+               (fun acc' (_, value) ->
+                 match value with
+                 | `String str -> str :: acc'
+                 | _ -> acc')
+               acc
+               subfields
+           | _ -> acc)
+         []
+         l
+     | _ -> [])
   | _ -> raise (Any "finder parser | Invalid JSON")
 ;;
 
@@ -151,9 +151,9 @@ let get_attribute session_id element_id attribute =
   match Yojson.Safe.from_string response with
   | `Assoc fields ->
     (match List.assoc "value" fields with
-    | `String href -> href
-    | _ as e ->
-      raise (Any (fmt "Unexpected response from driver: %s" (Yojson.Safe.to_string e))))
+     | `String href -> href
+     | _ as e ->
+       raise (Any (fmt "Unexpected response from driver: %s" (Yojson.Safe.to_string e))))
   | _ -> raise (Any "get_attribute | Invalid JSON")
 ;;
 

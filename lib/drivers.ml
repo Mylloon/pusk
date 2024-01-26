@@ -22,7 +22,7 @@ let rec download uri dest =
     let stream = Body.to_stream body in
     let res =
       Lwt_io.with_file ~mode:Lwt_io.output dest (fun chan ->
-          Lwt_stream.iter_s (Lwt_io.write chan) stream)
+        Lwt_stream.iter_s (Lwt_io.write chan) stream)
     in
     let* () = res in
     print_endline "Download done!";

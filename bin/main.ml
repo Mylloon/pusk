@@ -76,8 +76,8 @@ let handler data (signal : int) =
   stop_process data;
   exit
     (match signal with
-    | v when v = Sys.sigint -> 130
-    | _ -> 1)
+     | v when v = Sys.sigint -> 130
+     | _ -> 1)
 ;;
 
 let () =
@@ -89,12 +89,12 @@ let () =
     { session_id = snd data
     ; debug =
         (match Sys.getenv_opt "PUSK_DEBUG" with
-        | Some boolean -> if String.lowercase_ascii boolean = "true" then true else false
-        | None -> false)
+         | Some boolean -> if String.lowercase_ascii boolean = "true" then true else false
+         | None -> false)
     }
   in
   if ctx.debug then print_endline "Logging is enabled";
   (try main ctx with
-  | Any why -> print_endline why);
+   | Any why -> print_endline why);
   stop data
 ;;
