@@ -26,6 +26,7 @@ services:
 
 ## Local
 
+- Firefox installed
 - You will need these dependencies:
 
   ```sh
