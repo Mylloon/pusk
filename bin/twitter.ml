@@ -131,10 +131,11 @@ let find_latest_tweet ctx =
       List.map
         (fun date ->
           let time =
-            Core.Time.of_string_with_utc_offset
+            Core.Time_float.of_string_with_utc_offset
               (get_attribute ctx.session_id date "datetime")
           in
-          Float.to_int (Core.Time.Span.to_sec (Core.Time.to_span_since_epoch time)))
+          Float.to_int
+            (Core.Time_float.Span.to_sec (Core.Time_float.to_span_since_epoch time)))
         dates
     in
     (* Returns the most recent date *)
