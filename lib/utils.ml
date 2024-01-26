@@ -5,12 +5,19 @@ let fmt = Printf.sprintf
 type context =
   { session_id : string
   ; debug : bool
+  ; hashtag : bool
   }
 
 let load_dotenv =
   (* Load variables *)
   let path = "config/.env" in
   if Sys.file_exists path then Dotenv.export ~path ()
+;;
+
+let boolean_env variable =
+  match Sys.getenv_opt variable with
+  | Some boolean -> String.lowercase_ascii boolean = "true"
+  | None -> false
 ;;
 
 let keys_to_typing str =

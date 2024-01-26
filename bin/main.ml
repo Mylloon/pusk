@@ -45,10 +45,12 @@ let rec check ctx =
   if 0 = timeout
   then (
     if ctx.debug then print_endline "Tweeting...";
+    let message =
+      "This tweet is for the Twitter's CTO: don't suspend my account for inactivity."
+      ^ if ctx.hashtag then "#puskbot" else ""
+    in
     (* Tweet *)
-    tweet
-      ctx
-      "This tweet is for the Twitter's CTO: don't suspend my account for inactivity.";
+    tweet ctx message;
     (* Returns to profile page *)
     go_to_profile ctx;
     (* Wait the maximum time since we just tweeted *)
@@ -87,10 +89,8 @@ let () =
   load_dotenv;
   let ctx =
     { session_id = snd data
-    ; debug =
-        (match Sys.getenv_opt "PUSK_DEBUG" with
-         | Some boolean -> if String.lowercase_ascii boolean = "true" then true else false
-         | None -> false)
+    ; debug = boolean_env "PUSK_DEBUG"
+    ; hashtag = boolean_env "PUSK_HASHTAG"
     }
   in
   if ctx.debug then print_endline "Logging is enabled";
