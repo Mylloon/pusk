@@ -8,8 +8,8 @@ license: "AGPL-3.0-or-later"
 tags: ["api" "twitter"]
 depends: [
   "ocaml"
-  "dune" {>= "3.7"}
-  "cohttp-lwt-unix" {>= "5.1"}
+  "dune" {>= "3.13"}
+  "cohttp-lwt-unix" {>= "5.3"}
   "dotenv" {>= "0.0"}
   "twostep" {>= "1.0"}
   "odoc" {with-doc}

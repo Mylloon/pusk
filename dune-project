@@ -1,4 +1,4 @@
-(lang dune 3.7)
+(lang dune 3.13)
 
 (name pusk)
 
@@ -21,7 +21,7 @@
   ocaml
   dune
   (cohttp-lwt-unix
-   (>= 5.1))
+   (>= 5.3))
   (dotenv
    (>= 0.0))
   (twostep
