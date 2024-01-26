@@ -1,8 +1,9 @@
-pipeline:
+steps:
   publish:
     image: woodpeckerci/plugin-docker-buildx:2
     settings:
-      platforms: linux/amd64
+      labels:
+        platform: linux/amd64
       repo: git.mylloon.fr/${CI_REPO,,}
       auto_tag: true
       registry: git.mylloon.fr
