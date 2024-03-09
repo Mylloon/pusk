@@ -14,7 +14,7 @@ let connection_payload headless =
       }
     }
   }
-  |}
+    |}
     (if headless then "\"-headless\"" else "")
 ;;
 
@@ -22,14 +22,14 @@ let navigate_payload url = fmt {|
   {
     "url": "%s"
   }
-  |} url
+    |} url
 
 let execute_payload src = fmt {|
   {
     "script": "%s",
     "args": []
   }
-  |} src
+    |} src
 
 let find_payload strategy value =
   fmt {|
@@ -37,7 +37,7 @@ let find_payload strategy value =
     "using": "%s",
     "value": "%s"
   }
-  |} strategy value
+    |} strategy value
 ;;
 
 let send_keys_payload text =
@@ -47,7 +47,7 @@ let send_keys_payload text =
     "text": "%s",
     "value": %s
   }
-  |}
+    |}
     text
     (Yojson.Safe.to_string
        (`List (List.map (fun str -> `String str) (keys_to_typing text))))
