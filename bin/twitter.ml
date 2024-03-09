@@ -12,10 +12,8 @@ let inject_username session_id creds =
   let input_username =
     match find session_id strat with
     | [] -> raise (Any (fmt "Username input not found"))
-    | _ as l ->
-      if List.length l > 1
-      then raise (Any "Too many elements found as the username input")
-      else List.nth l 0
+    | it :: [] -> it
+    | _ -> raise (Any "Too many elements found as the username input")
   in
   (* Insert the username *)
   send_keys session_id input_username creds.username;
@@ -38,10 +36,8 @@ let rec _inject_password session_id creds try_count =
       inject_username session_id creds;
       _inject_password session_id creds (try_count - 1);
       None
-    | _ as l ->
-      if List.length l > 1
-      then raise (Any "Too many elements found as the password input")
-      else Some (List.nth l 0)
+    | it :: [] -> Some it
+    | _ -> raise (Any "Too many elements found as the password input")
   in
   match input_password with
   | Some input ->
@@ -83,12 +79,10 @@ let login_twitter ctx username password secret =
   (* Detection and injection of 2FA code if needed *)
   match find ctx.session_id (CSS "input[name='text']") with
   | [] -> print_endline "Doesn't use 2FA as no input found"
-  | _ as l ->
-    if List.length l > 1
-    then raise (Any "Too many elements found as 2FA input")
-    else (
-      if ctx.debug then print_endline "Type 2FA code...";
-      inject_2fa ctx.session_id secret (List.nth l 0))
+  | it :: [] ->
+    if ctx.debug then print_endline "Type 2FA code...";
+    inject_2fa ctx.session_id secret it
+  | _ -> raise (Any "Too many elements found as 2FA input")
 ;;
 
 let go_to_profile ctx =
@@ -96,10 +90,8 @@ let go_to_profile ctx =
   let profile_button =
     match find ctx.session_id (XPath "//a[@data-testid='AppTabBar_Profile_Link']") with
     | [] -> raise (Any (fmt "Profile button not found"))
-    | _ as l ->
-      if List.length l > 1
-      then raise (Any "Too many profile button found")
-      else List.nth l 0
+    | it :: [] -> it
+    | _ -> raise (Any "Too many profile button found")
   in
   if ctx.debug then print_endline "Navigate to user replies...";
   ignore
@@ -148,18 +140,16 @@ let tweet ctx msg =
   let tweet_area =
     match find ctx.session_id (CSS "div[data-testid='tweetTextarea_0']") with
     | [] -> raise (Any (fmt "Tweet area not found"))
-    | _ as l ->
-      if List.length l > 1 then raise (Any "Too many tweet areas found") else List.nth l 0
+    | it :: [] -> it
+    | _ -> raise (Any "Too many tweet areas found")
   in
   send_keys ctx.session_id tweet_area msg;
   Unix.sleep 2;
   let send_tweet_button =
     match find ctx.session_id (XPath "//div[@data-testid='tweetButtonInline']") with
     | [] -> raise (Any (fmt "Tweet button not found"))
-    | _ as l ->
-      if List.length l > 1
-      then raise (Any "Too many tweet button found")
-      else List.nth l 0
+    | it :: [] -> it
+    | _ -> raise (Any "Too many tweet button found")
   in
   click ctx.session_id send_tweet_button;
   Unix.sleep 8
