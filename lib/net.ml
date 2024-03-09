@@ -39,7 +39,15 @@ let get_session ?(headless = true) () =
     let rec find_session_id = function
       | ("sessionId", `String session_id) :: _ -> session_id
       | ("error", `String err) :: ("message", `String msg) :: _ ->
-        raise (Any (Printf.sprintf "%s - %s" err msg))
+        let msg' =
+          if Base.String.substr_index
+               msg
+               ~pattern:"unable to find binary in default location"
+             <> None
+          then msg ^ ". Maybe you need to install a navigator?"
+          else msg
+        in
+        raise (Any (Printf.sprintf "%s - %s" err msg'))
       | _ :: rest -> find_session_id rest
       | [] -> raise (Any "Session ID not found")
     in
