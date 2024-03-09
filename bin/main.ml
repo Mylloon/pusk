@@ -52,7 +52,7 @@ let rec check ctx =
     if ctx.debug then print_endline "Tweeting...";
     let message =
       "This tweet is for the Twitter's CTO: don't suspend my account for inactivity."
-      ^ if ctx.hashtag then "#puskbot" else ""
+      ^ if ctx.hashtag then " #puskbot" else ""
     in
     (* Tweet *)
     tweet ctx message;
