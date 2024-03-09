@@ -38,6 +38,8 @@ let get_session ?(headless = true) () =
     let value = List.assoc "value" fields in
     let rec find_session_id = function
       | ("sessionId", `String session_id) :: _ -> session_id
+      | ("error", `String err) :: ("message", `String msg) :: _ ->
+        raise (Any (Printf.sprintf "%s - %s" err msg))
       | _ :: rest -> find_session_id rest
       | [] -> raise (Any "Session ID not found")
     in
