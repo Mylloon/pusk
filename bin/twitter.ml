@@ -151,6 +151,9 @@ let tweet ctx msg =
     | it :: [] -> it
     | _ -> raise (Any "Too many tweet button found")
   in
+  (* We need first to click somewhere on the page to be able to interact with it *)
+  click_somewhere ctx.session_id 800 200;
+  Unix.sleep 2;
   click ctx.session_id send_tweet_button;
   Unix.sleep 8
 ;;

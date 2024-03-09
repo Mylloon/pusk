@@ -153,6 +153,13 @@ let click session_id element_id =
        Json.empty)
 ;;
 
+let click_somewhere session_id x y =
+  ignore
+    (execute_post_request
+       (fmt "%s/actions" (driver session_id))
+       (Json.send_left_click x y))
+;;
+
 let get_attribute session_id element_id attribute =
   let response =
     execute_get_request

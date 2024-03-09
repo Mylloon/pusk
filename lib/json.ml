@@ -52,3 +52,43 @@ let send_keys_payload text =
     (Yojson.Safe.to_string
        (`List (List.map (fun str -> `String str) (keys_to_typing text))))
 ;;
+
+let send_left_click pos_x pos_y =
+  fmt
+    {|
+  {
+    "actions": [
+      {
+        "type": "pointer",
+        "id": "mouse",
+        "parameters": {
+          "pointerType": "mouse"
+        },
+        "actions": [
+          {
+            "type": "pointerMove",
+            "origin": "viewport",
+            "x": %d,
+            "y": %d,
+            "duration": 0
+          },
+          {
+            "type": "pointerDown",
+            "button": 0
+          },
+          {
+            "type": "pause",
+            "duration": 100
+          },
+          {
+            "type": "pointerUp",
+            "button": 0
+          }
+        ]
+      }
+    ]
+  }
+    |}
+    pos_x
+    pos_y
+;;
