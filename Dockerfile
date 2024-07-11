@@ -23,5 +23,6 @@ RUN apk update && \
   rm -rf /var/cache/apk/*
 
 COPY --from=builder /usr/src/pusk/_build/default/bin/main.exe /app/pusk
+COPY --from=builder /usr/src/pusk/LICENSE /app/pusk
 
 CMD ["dumb-init", "./pusk"]
