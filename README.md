@@ -9,8 +9,6 @@ Send a tweet to prevent Twitter from closing your account, using a webdriver.
 You can use this dockercompose template:
 
 ```yaml
-version: "3.9"
-
 services:
   pusk:
     image: git.mylloon.fr/anri/pusk:latest
