@@ -5,4 +5,4 @@ _build/
 /gecko-*.tar.gz
 /geckodriver-*
 
-config/
+config/.env
