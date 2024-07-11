@@ -146,7 +146,7 @@ let tweet ctx msg =
   send_keys ctx.session_id tweet_area msg;
   Unix.sleep 2;
   let send_tweet_button =
-    match find ctx.session_id (XPath "//div[@data-testid='tweetButtonInline']") with
+    match find ctx.session_id (XPath "//button[@data-testid='tweetButtonInline']") with
     | [] -> raise (Any (fmt "Tweet button not found"))
     | it :: [] -> it
     | _ -> raise (Any "Too many tweet button found")
