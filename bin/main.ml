@@ -88,7 +88,7 @@ let handler data (signal : int) =
 ;;
 
 let () =
-  let data = start (Gecko "0.34.0") in
+  let data = start (Gecko "0.36.0") in
   Sys.set_signal Sys.sigint (Sys.Signal_handle (handler (fst data)));
   (* Load env variables *)
   load_dotenv;
