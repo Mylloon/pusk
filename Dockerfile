@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM ocaml/opam:alpine-3.20-ocaml-5.2 AS builder
+FROM ocaml/opam:alpine-3.22-ocaml-5.5 AS builder
 WORKDIR /usr/src/pusk
 COPY . .
 
