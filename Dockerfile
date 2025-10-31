@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM ocaml/opam:alpine-3.22-ocaml-5.5 AS builder
+FROM ocaml/opam:alpine-3.22-ocaml-5.2 AS builder
 WORKDIR /usr/src/pusk
 COPY . .
 
@@ -9,12 +9,12 @@ RUN apk add gmp-dev pcre-dev openssl-dev && \
   chown -R opam:opam .
 
 USER opam
-RUN opam install -y dune cohttp-lwt-unix dotenv twostep lwt_ssl yojson core && \
+RUN opam install -y --unlock-base dune cohttp-lwt-unix dotenv twostep lwt_ssl yojson core && \
   eval $(opam env) && \
   dune build --profile=release
 
 
-FROM alpine:3.20
+FROM alpine:3.22
 
 WORKDIR /app
 
